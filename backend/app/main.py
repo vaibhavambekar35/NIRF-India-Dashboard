@@ -32,8 +32,14 @@ async def add_no_cache_headers(request, call_next):
         response.headers["Expires"] = "0"
     return response
 
-# Include v1 API routes
+# Include v1 API routes (support both /api/v1 and /v1 for Vercel rewrites)
 app.include_router(api_router, prefix=settings.API_V1_STR)
+app.include_router(api_router, prefix="/v1")
+
+@app.get("/api/health")
+@app.get("/health")
+def health():
+    return {"status": "ok", "app": settings.PROJECT_NAME, "version": settings.PROJECT_VERSION}
 
 # Serve GeoJSON
 GEOJSON_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "public", "geojson", "india_states.geojson"))
