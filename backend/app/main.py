@@ -24,7 +24,6 @@ app.add_middleware(
 @app.middleware("http")
 async def add_no_cache_headers(request, call_next):
     response = await call_next(request)
-    # Prevent caching for frontend files so updates reflect immediately
     path = request.url.path
     if path == "/" or path.endswith((".js", ".css", ".html", ".json")):
         response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
@@ -32,28 +31,50 @@ async def add_no_cache_headers(request, call_next):
         response.headers["Expires"] = "0"
     return response
 
-# Include v1 API routes (support both /api/v1 and /v1 for Vercel rewrites)
-app.include_router(api_router, prefix=settings.API_V1_STR)
+# Support all route prefix patterns: /api/v1 (primary), /v1, and legacy /api
+app.include_router(api_router, prefix="/api/v1")
 app.include_router(api_router, prefix="/v1")
+app.include_router(api_router, prefix="/api")
 
 @app.get("/api/health")
 @app.get("/health")
 def health():
     return {"status": "ok", "app": settings.PROJECT_NAME, "version": settings.PROJECT_VERSION}
 
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
 # Serve GeoJSON
-GEOJSON_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "public", "geojson", "india_states.geojson"))
+GEOJSON_PATHS = [
+    os.path.join(BASE_DIR, "public", "geojson", "india_states.geojson"),
+    os.path.join(BASE_DIR, "india_states.geojson"),
+    "/var/task/india_states.geojson",
+    "/var/task/public/geojson/india_states.geojson"
+]
 
 @app.get("/public/geojson/india_states.geojson")
 @app.get("/india_states.geojson")
 def get_india_geojson():
-    if os.path.exists(GEOJSON_PATH):
-        return FileResponse(GEOJSON_PATH, media_type="application/json")
+    for p in GEOJSON_PATHS:
+        if os.path.exists(p):
+            return FileResponse(p, media_type="application/json")
     return HTMLResponse("GeoJSON file not found", status_code=404)
 
 # Mount frontend static directory
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 app.mount("/static", StaticFiles(directory=BASE_DIR), name="static")
+
+@app.get("/style.css")
+def get_style():
+    style_p = os.path.join(BASE_DIR, "style.css")
+    if os.path.exists(style_p):
+        return FileResponse(style_p, media_type="text/css")
+    return HTMLResponse("style.css not found", status_code=404)
+
+@app.get("/app.js")
+def get_app_js():
+    js_p = os.path.join(BASE_DIR, "app.js")
+    if os.path.exists(js_p):
+        return FileResponse(js_p, media_type="application/javascript")
+    return HTMLResponse("app.js not found", status_code=404)
 
 @app.get("/View PDF")
 @app.get("/View%20PDF")
