@@ -89,7 +89,21 @@ tr.leaderboard-row.active td,
 /* ECharts Container Canvas */
 #echartsMap {
   width: 100% !important;
-  height: 520px !important;
+  height: 100% !important;
+}
+
+/* Mobile & Touch UX Enhancements */
+button, select, a, .nav-btn, .leaderboard-row {
+  touch-action: manipulation;
+}
+
+.overflow-y-auto, .overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Smooth mobile off-canvas drawer transition */
+#mainSidebar {
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Table Row Hover */
@@ -206,6 +220,7 @@ body.kiosk-mode main {
 
   #stateBriefPrintableContent table {
     width: 100% !important;
+    min-width: 0 !important;
     border-collapse: collapse !important;
     page-break-inside: auto !important;
     font-size: 8pt !important;

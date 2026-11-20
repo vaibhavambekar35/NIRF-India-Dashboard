@@ -27,6 +27,7 @@ let chartCompareDisciplineInstance = null;
 document.addEventListener('DOMContentLoaded', async () => {
   if (window.lucide) lucide.createIcons();
   setupNavigation();
+  setupMobileMenu();
   setupEventListeners();
 
   await loadMetadata();
@@ -40,6 +41,38 @@ function setupNavigation() {
     btn.addEventListener('click', () => {
       const targetView = btn.getAttribute('data-view');
       switchView(targetView);
+    });
+  });
+}
+
+// 1b. Mobile Off-Canvas Navigation Drawer Toggle
+function setupMobileMenu() {
+  const btnToggle = document.getElementById('btnToggleMobileMenu');
+  const btnClose = document.getElementById('btnCloseMobileSidebar');
+  const sidebar = document.getElementById('mainSidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+
+  const openSidebar = () => {
+    if (sidebar) sidebar.classList.remove('-translate-x-full');
+    if (backdrop) backdrop.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden', 'lg:overflow-auto');
+  };
+
+  const closeSidebar = () => {
+    if (sidebar) sidebar.classList.add('-translate-x-full');
+    if (backdrop) backdrop.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden', 'lg:overflow-auto');
+  };
+
+  if (btnToggle) btnToggle.addEventListener('click', openSidebar);
+  if (btnClose) btnClose.addEventListener('click', closeSidebar);
+  if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (window.innerWidth < 1024) {
+        closeSidebar();
+      }
     });
   });
 }
@@ -72,7 +105,7 @@ async function switchView(viewName) {
     document.getElementById('viewDistribution').classList.remove('hidden');
     await loadDistributionData();
     if (echartsInstance) {
-      setTimeout(() => echartsInstance.resize(), 50);
+      setTimeout(() => echartsInstance.resize(), 100);
     }
   } else if (viewName === 'overview') {
     document.getElementById('viewOverview').classList.remove('hidden');
@@ -80,6 +113,10 @@ async function switchView(viewName) {
   } else if (viewName === 'comparison') {
     document.getElementById('viewComparison').classList.remove('hidden');
     await loadComparisonData();
+    setTimeout(() => {
+      if (chartCompareRadarInstance) chartCompareRadarInstance.resize();
+      if (chartCompareDisciplineInstance) chartCompareDisciplineInstance.resize();
+    }, 100);
   } else if (viewName === 'explorer') {
     document.getElementById('viewExplorer').classList.remove('hidden');
     await loadExplorerTable();
@@ -162,8 +199,20 @@ async function initializeEChartsMap() {
     }
   }
 
-  window.addEventListener('resize', () => {
-    if (echartsInstance) echartsInstance.resize();
+  let resizeTimer = null;
+  const handleResize = () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (echartsInstance) echartsInstance.resize();
+      if (chartRadarInstance) chartRadarInstance.resize();
+      if (chartCompareRadarInstance) chartCompareRadarInstance.resize();
+      if (chartCompareDisciplineInstance) chartCompareDisciplineInstance.resize();
+    }, 100);
+  };
+
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(handleResize, 150);
   });
 }
 
@@ -191,6 +240,8 @@ function renderEChartsChoropleth(stateCounts) {
     };
   });
 
+  const isMobile = window.innerWidth < 640;
+
   const option = {
     tooltip: {
       trigger: 'item',
@@ -215,17 +266,17 @@ function renderEChartsChoropleth(stateCounts) {
     visualMap: {
       min: 0,
       max: Math.max(maxCount, 10),
-      left: 24,
-      bottom: 24,
-      text: ['High Concentration', '0 Institutions'],
-      textGap: 8,
-      itemWidth: 12,
-      itemHeight: 120,
+      left: isMobile ? 10 : 20,
+      bottom: isMobile ? 10 : 20,
+      text: isMobile ? ['High', '0'] : ['High Concentration', '0 Institutions'],
+      textGap: isMobile ? 4 : 8,
+      itemWidth: isMobile ? 10 : 12,
+      itemHeight: isMobile ? 85 : 120,
       calculable: true,
       inRange: {
         color: ['#fff7ed', '#ffedd5', '#fed7aa', '#fb923c', '#ea580c', '#c2410c', '#7c2d12']
       },
-      textStyle: { color: '#64748b', fontSize: 10, fontWeight: 500 }
+      textStyle: { color: '#64748b', fontSize: isMobile ? 9 : 10, fontWeight: 500 }
     },
     series: [
       {
@@ -233,10 +284,10 @@ function renderEChartsChoropleth(stateCounts) {
         type: 'map',
         map: 'India',
         roam: true,
-        scaleLimit: { min: 0.9, max: 5 },
+        scaleLimit: { min: 0.8, max: 5 },
         aspectScale: 0.9,
-        zoom: 1.15,
-        center: [83.0, 22.5],
+        zoom: isMobile ? 1.05 : 1.15,
+        center: isMobile ? [82.5, 22.0] : [83.0, 22.5],
         selectedMode: 'single',
         select: {
           disabled: false,
@@ -1526,18 +1577,18 @@ async function generateStateBrief(stateId) {
 
     container.innerHTML = `
       <!-- Briefing Header -->
-      <div class="border-b-2 border-slate-900 pb-4">
-        <div class="flex items-center justify-between">
+      <div class="border-b-2 border-slate-900 pb-3 sm:pb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
           <div>
             <span class="text-[10px] font-bold tracking-widest text-blue-700 uppercase">Government of India • Ministry of Education</span>
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight mt-0.5">${data.state_name} – Higher Education Ranking Report</h2>
-            <p class="text-xs text-slate-500 mt-0.5">National Institutional Ranking Framework (NIRF ${data.year}) • Scope: ${data.scope === 'top_100' ? 'Top 100 Institutions' : 'All Ranked'}</p>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-0.5">${data.state_name} – Higher Education Ranking Report</h2>
+            <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">National Institutional Ranking Framework (NIRF ${data.year}) • Scope: ${data.scope === 'top_100' ? 'Top 100 Institutions' : 'All Ranked'}</p>
           </div>
-          <div class="text-right">
-            <span class="inline-block px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-bold font-mono">
+          <div class="text-left sm:text-right flex-shrink-0">
+            <span class="inline-block px-2.5 sm:px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-bold font-mono">
               OFFICIAL RANKING REPORT
             </span>
-            <p class="text-[10px] text-slate-400 mt-1">Generated: ${new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
+            <p class="text-[10px] text-slate-400 mt-0.5 sm:mt-1">Generated: ${new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
           </div>
         </div>
       </div>
@@ -1576,7 +1627,7 @@ async function generateStateBrief(stateId) {
           <span class="text-[10px] text-slate-400">Official Parameter Scores</span>
         </div>
         <div class="overflow-x-auto rounded-lg border border-slate-200">
-          <table class="min-w-full text-xs divide-y divide-slate-200">
+          <table class="min-w-[700px] md:min-w-full text-xs divide-y divide-slate-200">
             <thead class="bg-slate-50 font-semibold text-slate-600">
               <tr>
                 <th class="py-1.5 px-2.5 text-center">Rank</th>
