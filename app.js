@@ -523,6 +523,12 @@ function renderLeaderboardTable(stateCounts, totalInstitutions) {
   });
 }
 
+function getScorecardUrl(sourceUrl) {
+  if (!sourceUrl || !sourceUrl.startsWith('http') || !sourceUrl.includes('/pdf/')) return null;
+  const ext = sourceUrl.includes('/2023/') ? '.png' : '.jpg';
+  return sourceUrl.replace('/pdf/', '/graph/').replace(/\.pdf$/i, ext);
+}
+
 // 7. State Drill-down Information Panel
 async function openStateDetail(stateId, stateName) {
   currentSelectedStateId = stateId;
@@ -562,7 +568,7 @@ async function openStateDetail(stateId, stateName) {
     tbody.innerHTML = '';
 
     if (!data.institutions || data.institutions.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-400 text-xs">No ranked institutions found for this state</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-slate-400 text-xs">No ranked institutions found for this state</td></tr>`;
       return;
     }
 
@@ -575,6 +581,12 @@ async function openStateDetail(stateId, stateName) {
         : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200">#${inst.rank}</span>`;
 
       const scoreText = inst.score ? `<span class="font-bold text-slate-900">${inst.score.toFixed(2)}</span>` : `<span class="text-slate-300">—</span>`;
+      
+      const scUrl = getScorecardUrl(inst.source_url);
+      const scorecardBtn = scUrl
+        ? `<a href="${scUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="p-1 text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 rounded inline-flex items-center" title="View Official NIRF Scorecard (Graph & Sub-parameters)"><i data-lucide="bar-chart-2" class="w-4 h-4"></i></a>`
+        : `<span class="text-slate-300 font-mono">—</span>`;
+
       const pdfBtn = (inst.source_url && inst.source_url.startsWith('http'))
         ? `<a href="${inst.source_url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="p-1 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded inline-flex items-center" title="Download Official NIRF DCS Report (PDF)"><i data-lucide="file-text" class="w-4 h-4"></i></a>`
         : `<span class="text-slate-300 font-mono">—</span>`;
@@ -584,6 +596,7 @@ async function openStateDetail(stateId, stateName) {
         <td class="py-2 px-3 font-semibold text-slate-900">${inst.institution_name}</td>
         <td class="py-2 px-3 text-slate-600">${inst.city || '—'}</td>
         <td class="py-2 px-3 text-right">${scoreText}</td>
+        <td class="py-2 px-3 text-center">${scorecardBtn}</td>
         <td class="py-2 px-3 text-center">${pdfBtn}</td>
       `;
 
@@ -1458,9 +1471,15 @@ async function generateStateBrief(stateId) {
     });
 
     let instRowsHtml = rankedInsts.map(inst => {
+      const scUrl = getScorecardUrl(inst.source_url);
+      const scorecard = scUrl
+        ? `<a href="${scUrl}" target="_blank" rel="noopener noreferrer" class="text-emerald-700 font-bold hover:underline" title="View Official NIRF Scorecard (Graph & Sub-parameters)">Scorecard</a>`
+        : `<span class="text-slate-300 font-mono">—</span>`;
+
       const pdf = (inst.source_url && inst.source_url.startsWith('http'))
-        ? `<a href="${inst.source_url}" target="_blank" class="text-blue-600 font-bold hover:underline">PDF</a>`
+        ? `<a href="${inst.source_url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 font-bold hover:underline" title="Download Official NIRF DCS Report">PDF</a>`
         : `<span class="text-slate-300">—</span>`;
+
       return `
         <tr class="hover:bg-slate-50">
           <td class="py-1.5 px-2.5 text-center font-bold text-blue-700 whitespace-nowrap">#${inst.rank}</td>
@@ -1473,6 +1492,7 @@ async function generateStateBrief(stateId) {
           <td class="py-1.5 px-2.5 text-right text-slate-600 whitespace-nowrap">${inst.go ? inst.go.toFixed(1) : '—'}</td>
           <td class="py-1.5 px-2.5 text-right text-slate-600 whitespace-nowrap">${inst.oi ? inst.oi.toFixed(1) : '—'}</td>
           <td class="py-1.5 px-2.5 text-right text-slate-600 whitespace-nowrap">${inst.perception ? inst.perception.toFixed(1) : '—'}</td>
+          <td class="py-1.5 px-2.5 text-center whitespace-nowrap">${scorecard}</td>
           <td class="py-1.5 px-2.5 text-center whitespace-nowrap">${pdf}</td>
         </tr>
       `;
@@ -1543,6 +1563,7 @@ async function generateStateBrief(stateId) {
                 <th class="py-1.5 px-2.5 text-right" title="Graduation Outcomes">GO</th>
                 <th class="py-1.5 px-2.5 text-right" title="Outreach & Inclusivity">OI</th>
                 <th class="py-1.5 px-2.5 text-right" title="Peer Perception">PR</th>
+                <th class="py-1.5 px-2.5 text-center">Scorecard</th>
                 <th class="py-1.5 px-2.5 text-center">Report</th>
               </tr>
             </thead>
