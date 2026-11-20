@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Environment files
+.env
+.env.local
+
+# Test & Debug Screenshots
+*.png
+*.jpg
+*.jpeg
+
+# Temporary scripts
+test_*.py
+inspect_*.py
+update_*.py
+apply_*.py
+verify_*.py
+
+# Operating System files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+
+# Legacy SQLite backup (keep nirf_v2.db so clone runs immediately)
+nirf_insights.db

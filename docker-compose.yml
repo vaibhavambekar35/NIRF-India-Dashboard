@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # PostgreSQL 15 Database
+  db:
+    image: postgres:15-alpine
+    container_name: nirf_postgres_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-nirf_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./nirf_schema_postgres.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./nirf_seed_postgres.sql:/docker-entrypoint-initdb.d/02_seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI Backend & Dashboard Service
+  api:
+    build: .
+    container_name: nirf_dashboard_api
+    command: python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-nirf_db}
+      PORT: 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+
+volumes:
+  postgres_data:
