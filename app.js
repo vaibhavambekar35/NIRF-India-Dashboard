@@ -501,7 +501,7 @@ function renderLeaderboardTable(stateCounts, totalInstitutions) {
       <td class="py-2.5 px-3 text-center">${rankPill}</td>
       <td class="py-2.5 px-3">
         <div class="font-semibold text-slate-800">${st.state_name}</div>
-        <div class="text-[10px] text-slate-400 truncate max-w-[200px]" title="Top: ${st.top_institution || 'None'}">Top: ${st.top_institution || 'None'}</div>
+        <div class="text-[10px] text-slate-500 break-words leading-tight max-w-[260px]" title="Top: ${st.top_institution || 'None'}">Top: ${st.top_institution || 'None'}</div>
       </td>
       <td class="py-2.5 px-3 text-right font-bold text-slate-900">${st.institution_count}</td>
       <td class="py-2.5 px-3 text-center">
@@ -1233,9 +1233,9 @@ async function renderStateComparison() {
               <p class="text-[10px] text-blue-600 font-bold uppercase">${scopeLabel} in ${catName}</p>
             </div>
           </div>
-          <div class="mt-3 pt-3 border-t border-blue-200/80 flex items-center justify-between text-xs">
-            <span class="text-slate-600">Top in ${catName}:</span>
-            <span class="font-bold text-slate-900 truncate max-w-[220px]" title="${a.top_institution || '—'}">${a.top_institution || '—'}</span>
+          <div class="mt-3 pt-3 border-t border-blue-200/80 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 text-xs">
+            <span class="text-slate-600 flex-shrink-0">Top in ${catName}:</span>
+            <span class="font-bold text-slate-900 break-words text-left sm:text-right" title="${a.top_institution || '—'}">${a.top_institution || '—'}</span>
           </div>
         </div>
 
@@ -1251,9 +1251,9 @@ async function renderStateComparison() {
               <p class="text-[10px] text-amber-700 font-bold uppercase">${scopeLabel} in ${catName}</p>
             </div>
           </div>
-          <div class="mt-3 pt-3 border-t border-amber-200 flex items-center justify-between text-xs">
-            <span class="text-slate-600">Top in ${catName}:</span>
-            <span class="font-bold text-slate-900 truncate max-w-[220px]" title="${b.top_institution || '—'}">${b.top_institution || '—'}</span>
+          <div class="mt-3 pt-3 border-t border-amber-200 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 text-xs">
+            <span class="text-slate-600 flex-shrink-0">Top in ${catName}:</span>
+            <span class="font-bold text-slate-900 break-words text-left sm:text-right" title="${b.top_institution || '—'}">${b.top_institution || '—'}</span>
           </div>
         </div>
       </div>
@@ -1394,7 +1394,7 @@ async function renderMoversTracker() {
         <div class="bg-slate-50/80 border border-slate-200 rounded-lg p-3 hover:bg-slate-100 transition">
           <div class="flex items-start justify-between gap-2">
             <div class="flex-1 min-w-0">
-              <h5 class="text-xs font-bold text-slate-900 truncate" title="${r.institution_name}">${r.institution_name}</h5>
+              <h5 class="text-xs font-bold text-slate-900 break-words leading-snug" title="${r.institution_name}">${r.institution_name}</h5>
               <p class="text-[11px] text-slate-500">${r.state_name} • <span class="font-medium text-blue-700">${r.category}</span></p>
             </div>
             <div class="text-right flex-shrink-0">
@@ -1479,7 +1479,7 @@ async function generateStateBrief(stateId) {
         <div class="bg-emerald-50/60 border border-emerald-200 rounded-xl p-3">
           <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Best National Rank</span>
           <p class="text-2xl font-black text-emerald-900 mt-1">#${s.best_rank || 'N/A'}</p>
-          <span class="text-[10px] text-emerald-700 truncate block font-medium" title="${s.top_institution || ''}">${s.top_institution || 'N/A'}</span>
+          <span class="text-[10px] text-emerald-700 break-words block font-medium leading-tight mt-0.5" title="${s.top_institution || ''}">${s.top_institution || 'N/A'}</span>
         </div>
         <div class="bg-amber-50/60 border border-amber-200 rounded-xl p-3">
           <span class="text-[10px] font-bold text-amber-700 uppercase tracking-wider">Avg NIRF Score</span>
