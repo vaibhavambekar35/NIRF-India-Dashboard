@@ -52,20 +52,24 @@
   <!-- Top Sovereign Midnight Navy Bar (MahaSAMARTH Global Header) -->
   <header class="w-full bg-[#070f1e] text-white px-5 py-2.5 z-40 border-b border-slate-800 flex items-center justify-between shadow-md flex-shrink-0">
     <div class="flex items-center space-x-3.5">
-      <div class="px-2.5 py-1 rounded bg-white text-[#070f1e] font-black text-xs tracking-wider shadow-sm flex items-center space-x-1">
-        <span>ICARE</span>
+      <!-- Official ICARE Logo Badge -->
+      <a href="https://www.nirfindia.org" target="_blank" class="h-9 px-2.5 py-1 rounded-lg bg-white shadow-xs border border-slate-200/20 flex items-center justify-center hover:opacity-95 transition" title="ICARE - Ratings & Rankings">
+        <img src="/public/images/icare_logo.png" alt="ICARE" class="h-6 w-auto object-contain" />
+      </a>
+
+      <!-- Official MahaSAMARTH Logo Badge -->
+      <div class="h-9 px-3 py-1 rounded-lg bg-white shadow-xs border border-slate-200/20 flex items-center justify-center" title="महा SAMARTH">
+        <img src="/public/images/mahasamarth_logo.png" alt="महा SAMARTH" class="h-6 w-auto object-contain" />
       </div>
-      <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-[#ea580c] to-[#c2410c] flex items-center justify-center text-white shadow-sm font-black text-xs">
-        <i data-lucide="award" class="w-4 h-4"></i>
-      </div>
+
+      <div class="hidden sm:block h-6 w-px bg-slate-700/80"></div>
+
       <div class="flex flex-col">
         <div class="flex items-center space-x-2">
-          <span class="text-orange-500 font-extrabold text-base leading-none">महा</span>
-          <span class="text-white font-extrabold text-xs tracking-widest leading-none">SAMARTH</span>
-          <span class="text-slate-500 text-xs font-light">|</span>
-          <span class="text-slate-200 font-bold text-xs tracking-wide leading-none">NIRF RANKING INTELLIGENCE</span>
+          <span class="text-slate-200 font-extrabold text-xs tracking-wider leading-none">NIRF RANKING INTELLIGENCE</span>
+          <span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#c2410c] text-white tracking-widest uppercase">MoE</span>
         </div>
-        <p class="text-[10px] text-slate-400 mt-0.5 hidden sm:block">Ministry of Education National Institutional Ranking Framework Surveillance • Trusted Intelligence</p>
+        <p class="text-[10px] text-slate-400 mt-0.5 hidden md:block">Ministry of Education National Institutional Ranking Framework Surveillance • Trusted Intelligence</p>
       </div>
     </div>
 
@@ -142,11 +146,14 @@
       <!-- Sidebar Project Info Badge (Peach / Terracotta Gradient) -->
       <div class="p-4 border-t border-[#f1ede6] bg-[#fbf9f6]">
         <div class="rounded-xl bg-orange-50/80 p-3.5 border border-orange-200/80 shadow-2xs">
-          <div class="flex items-center space-x-2 text-xs font-bold text-orange-950">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>MITRA Project</span>
+          <div class="flex items-center justify-between mb-1.5">
+            <div class="flex items-center space-x-2 text-xs font-bold text-orange-950">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>MITRA Project</span>
+            </div>
+            <img src="/public/images/icare_logo.png" alt="ICARE" class="h-3.5 w-auto object-contain" />
           </div>
-          <p class="text-[11px] text-slate-600 mt-1">Managed by <strong>ICARE</strong> Institutional Analytics</p>
+          <p class="text-[11px] text-slate-600">Managed by <strong>ICARE</strong> Institutional Analytics</p>
         </div>
       </div>
     </aside>
@@ -652,8 +659,14 @@
       </main>
 
       <!-- Footer -->
-      <footer class="bg-white border-t border-slate-200 px-6 py-3 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-        <p><strong>NIRF Insight</strong> &copy; 2026. Managed by <strong>ICARE</strong> under the <strong>MITRA Project</strong>. Official rankings from <a href="https://www.nirfindia.org" target="_blank" class="text-[#c2410c] font-semibold hover:underline">nirfindia.org</a>.</p>
+      <footer class="bg-white border-t border-slate-200 px-6 py-3 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center space-x-3">
+          <img src="/public/images/icare_logo.png" alt="ICARE" class="h-4 w-auto object-contain opacity-85" />
+          <span class="text-slate-300">|</span>
+          <img src="/public/images/mahasamarth_logo.png" alt="MahaSAMARTH" class="h-4 w-auto object-contain opacity-85" />
+          <span class="text-slate-300">|</span>
+          <p><strong>NIRF Insight</strong> &copy; 2026. Managed by <strong>ICARE</strong> under the <strong>MITRA Project</strong>. Official rankings from <a href="https://www.nirfindia.org" target="_blank" class="text-[#c2410c] font-semibold hover:underline">nirfindia.org</a>.</p>
+        </div>
         <div class="flex items-center space-x-3 text-[11px] text-slate-400">
           <span>PostgreSQL Architecture</span>
           <span>•</span>
