@@ -91,7 +91,7 @@ async function switchView(viewName) {
 // 2. Load Years and Categories from Database API
 async function loadMetadata() {
   try {
-    const yRes = await fetch('/api/v1/years');
+    const yRes = await fetch('/v1/years');
     const years = await yRes.json();
     const selectY = document.getElementById('selectYear');
     if (selectY && years.length > 0) {
@@ -108,7 +108,7 @@ async function loadMetadata() {
       });
     }
 
-    const cRes = await fetch('/api/v1/categories');
+    const cRes = await fetch('/v1/categories');
     const categories = await cRes.json();
     const selectC = document.getElementById('selectCategory');
     if (selectC && categories.length > 0) {
@@ -392,7 +392,7 @@ async function loadCurrentView() {
 // 5. Load Distribution Data (Main Map & Leaderboard)
 async function loadDistributionData() {
   try {
-    const res = await fetch(`/api/v1/distribution?year=${currentYear}&category=${currentCategorySlug}&scope=${currentScope}&ownership=${currentOwnership}`);
+    const res = await fetch(`/v1/distribution?year=${currentYear}&category=${currentCategorySlug}&scope=${currentScope}&ownership=${currentOwnership}`);
     const data = await res.json();
     currentDistributionData = data;
 
@@ -538,7 +538,7 @@ async function openStateDetail(stateId, stateName) {
   document.getElementById('panelStateName').textContent = stateName;
 
   try {
-    const res = await fetch(`/api/v1/distribution/states/${stateId}?year=${currentYear}&category=${currentCategorySlug}&scope=${currentScope}&ownership=${currentOwnership}`);
+    const res = await fetch(`/v1/distribution/states/${stateId}?year=${currentYear}&category=${currentCategorySlug}&scope=${currentScope}&ownership=${currentOwnership}`);
     const data = await res.json();
 
     const scopeBadgeLabel = currentScope === 'top_100' ? 'Top 100' : 'All Ranked';
@@ -591,7 +591,7 @@ async function openStateDetail(stateId, stateName) {
 // 8. Overview View Data
 async function loadOverviewData() {
   try {
-    const res = await fetch('/api/v1/availability');
+    const res = await fetch('/v1/availability');
     const editions = await res.json();
     const tbody = document.getElementById('overviewCoverageBody');
     if (!tbody) return;
@@ -635,7 +635,7 @@ let explorerSearch = '';
 let explorerTier = 'all';
 
 async function loadExplorerTable() {
-  let url = `/api/v1/institutions?year=${currentYear}&category=${currentCategorySlug}&rank_type=${explorerTier}&ownership=${currentOwnership}`;
+  let url = `/v1/institutions?year=${currentYear}&category=${currentCategorySlug}&rank_type=${explorerTier}&ownership=${currentOwnership}`;
   if (explorerSearch) url += `&search=${encodeURIComponent(explorerSearch)}`;
 
   try {
@@ -696,7 +696,7 @@ async function loadExplorerTable() {
 // 11. Institution Scorecard Modal
 async function openInstitutionModal(instId) {
   try {
-    const res = await fetch(`/api/v1/institutions/${instId}?category=${currentCategorySlug}&year=${currentYear}`);
+    const res = await fetch(`/v1/institutions/${instId}?category=${currentCategorySlug}&year=${currentYear}`);
     const data = await res.json();
 
     document.getElementById('mInstName').textContent = data.institution_name;
@@ -827,7 +827,7 @@ async function openInstitutionModal(instId) {
 }
 
 async function openInstitutionModalByName(instName) {
-  const res = await fetch(`/api/v1/institutions?search=${encodeURIComponent(instName)}`);
+  const res = await fetch(`/v1/institutions?search=${encodeURIComponent(instName)}`);
   const list = await res.json();
   if (list && list.length > 0) {
     openInstitutionModal(list[0].id);
@@ -902,7 +902,7 @@ function setupEventListeners() {
 
   document.getElementById('btnExportStateData').addEventListener('click', () => {
     if (currentSelectedStateId) {
-      window.open(`/api/v1/export?format=csv&year=${currentYear}&category=${currentCategorySlug}&state_id=${currentSelectedStateId}&scope=${currentScope}&ownership=${currentOwnership}`, '_blank');
+      window.open(`/v1/export?format=csv&year=${currentYear}&category=${currentCategorySlug}&state_id=${currentSelectedStateId}&scope=${currentScope}&ownership=${currentOwnership}`, '_blank');
     }
   });
 
@@ -983,12 +983,12 @@ function setupEventListeners() {
 
   document.getElementById('btnExportCSV').addEventListener('click', e => {
     e.preventDefault();
-    window.open(`/api/v1/export?format=csv&year=${currentYear}&category=${currentCategorySlug}&scope=${currentScope}`, '_blank');
+    window.open(`/v1/export?format=csv&year=${currentYear}&category=${currentCategorySlug}&scope=${currentScope}`, '_blank');
   });
 
   document.getElementById('btnExportXLSX').addEventListener('click', e => {
     e.preventDefault();
-    window.open(`/api/v1/export?format=xlsx&year=${currentYear}&category=${currentCategorySlug}&scope=${currentScope}`, '_blank');
+    window.open(`/v1/export?format=xlsx&year=${currentYear}&category=${currentCategorySlug}&scope=${currentScope}`, '_blank');
   });
 
   document.getElementById('btnModalClose').addEventListener('click', () => {
@@ -1031,7 +1031,7 @@ async function initCompareSelectors() {
 
   if (selA.children.length === 0 || allStatesList.length === 0) {
     try {
-      const res = await fetch('/api/v1/states');
+      const res = await fetch('/v1/states');
       allStatesList = await res.json();
       
       selA.innerHTML = '';
@@ -1069,7 +1069,7 @@ async function renderStateComparison() {
   if (!container) return;
 
   try {
-    const res = await fetch(`/api/v1/benchmarking/compare-states?state_a_id=${compareStateAId}&state_b_id=${compareStateBId}&year=${currentYear}&category=${currentCategorySlug}&scope=${currentScope}&ownership=${currentOwnership}`);
+    const res = await fetch(`/v1/benchmarking/compare-states?state_a_id=${compareStateAId}&state_b_id=${compareStateBId}&year=${currentYear}&category=${currentCategorySlug}&scope=${currentScope}&ownership=${currentOwnership}`);
     const data = await res.json();
     const a = data.state_a;
     const b = data.state_b;
@@ -1360,7 +1360,7 @@ async function renderMoversTracker() {
   if (!tbody || !risersContainer) return;
 
   try {
-    const res = await fetch(`/api/v1/benchmarking/movers?category=${currentCategorySlug}&scope=${currentScope}`);
+    const res = await fetch(`/v1/benchmarking/movers?category=${currentCategorySlug}&scope=${currentScope}`);
     const data = await res.json();
 
     // 1. State changes table
@@ -1416,7 +1416,7 @@ async function renderMoversTracker() {
 // 14. One-Click State Policy Brief (Factsheet Generator)
 async function generateStateBrief(stateId) {
   try {
-    const res = await fetch(`/api/v1/export/state-brief?state_id=${stateId}&year=${currentYear}&scope=${currentScope}`);
+    const res = await fetch(`/v1/export/state-brief?state_id=${stateId}&year=${currentYear}&scope=${currentScope}`);
     const data = await res.json();
 
     const container = document.getElementById('stateBriefPrintableContent');
