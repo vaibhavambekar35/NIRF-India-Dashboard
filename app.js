@@ -536,9 +536,17 @@ async function openStateDetail(stateId, stateName) {
   panel.classList.remove('hidden');
 
   document.getElementById('panelStateName').textContent = stateName;
-  const btnBriefText = document.getElementById('btnStateBriefText');
-  if (btnBriefText) {
-    btnBriefText.textContent = `${stateName} Ranking Report (PDF)`;
+  
+  // Dynamically update the PDF button label to "[State Name] Ranking Report (PDF)"
+  const btnStateBrief = document.getElementById('btnStateBrief');
+  if (btnStateBrief) {
+    const span = btnStateBrief.querySelector('span');
+    if (span) {
+      span.textContent = `${stateName} Ranking Report (PDF)`;
+    } else {
+      btnStateBrief.innerHTML = `<i data-lucide="file-text" class="w-3.5 h-3.5 text-emerald-600"></i><span id="btnStateBriefText">${stateName} Ranking Report (PDF)</span>`;
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+    }
   }
 
   try {
@@ -900,9 +908,10 @@ function setupEventListeners() {
     document.getElementById('panelStateDetail').classList.add('hidden');
     currentSelectedStateId = null;
     currentSelectedStateName = null;
-    const btnBriefText = document.getElementById('btnStateBriefText');
-    if (btnBriefText) {
-      btnBriefText.textContent = 'State Ranking Report (PDF)';
+    const btnStateBrief = document.getElementById('btnStateBrief');
+    if (btnStateBrief) {
+      const span = btnStateBrief.querySelector('span');
+      if (span) span.textContent = 'State Ranking Report (PDF)';
     }
     highlightStateOnMap(null);
     highlightStateOnLeaderboard(null);
