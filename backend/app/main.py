@@ -61,6 +61,8 @@ def get_india_geojson():
 
 # Mount frontend static directory
 app.mount("/static", StaticFiles(directory=BASE_DIR), name="static")
+if os.path.exists(os.path.join(BASE_DIR, "public", "images")):
+    app.mount("/images", StaticFiles(directory=os.path.join(BASE_DIR, "public", "images")), name="images")
 if os.path.exists(os.path.join(BASE_DIR, "public")):
     app.mount("/public", StaticFiles(directory=os.path.join(BASE_DIR, "public")), name="public")
 
