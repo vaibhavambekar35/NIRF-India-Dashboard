@@ -66,6 +66,23 @@ if os.path.exists(os.path.join(BASE_DIR, "public", "images")):
 if os.path.exists(os.path.join(BASE_DIR, "public")):
     app.mount("/public", StaticFiles(directory=os.path.join(BASE_DIR, "public")), name="public")
 
+@app.get("/favicon.ico")
+def get_favicon():
+    p = os.path.join(BASE_DIR, "public", "favicon.ico")
+    if os.path.exists(p):
+        return FileResponse(p, media_type="image/x-icon")
+    root_p = os.path.join(BASE_DIR, "favicon.ico")
+    if os.path.exists(root_p):
+        return FileResponse(root_p, media_type="image/x-icon")
+    return HTMLResponse("favicon not found", status_code=404)
+
+@app.get("/site.webmanifest")
+def get_manifest():
+    p = os.path.join(BASE_DIR, "public", "site.webmanifest")
+    if os.path.exists(p):
+        return FileResponse(p, media_type="application/manifest+json")
+    return HTMLResponse("manifest not found", status_code=404)
+
 @app.get("/style.css")
 def get_style():
     style_p = os.path.join(BASE_DIR, "style.css")
