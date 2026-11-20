@@ -1463,14 +1463,17 @@ async function generateStateBrief(stateId) {
         : `<span class="text-slate-300">—</span>`;
       return `
         <tr class="hover:bg-slate-50">
-          <td class="py-1.5 px-2.5 text-center font-bold text-blue-700">#${inst.rank}</td>
+          <td class="py-1.5 px-2.5 text-center font-bold text-blue-700 whitespace-nowrap">#${inst.rank}</td>
           <td class="py-1.5 px-2.5 font-semibold text-slate-900">${inst.institution_name}</td>
-          <td class="py-1.5 px-2.5 text-slate-600">${inst.category}</td>
-          <td class="py-1.5 px-2.5 text-slate-500 text-[11px]">${inst.institution_type}</td>
-          <td class="py-1.5 px-2.5 text-right font-bold text-slate-900">${inst.score ? inst.score.toFixed(2) : '—'}</td>
-          <td class="py-1.5 px-2.5 text-right text-slate-600">${inst.tlr ? inst.tlr.toFixed(1) : '—'}</td>
-          <td class="py-1.5 px-2.5 text-right text-slate-600">${inst.rpc ? inst.rpc.toFixed(1) : '—'}</td>
-          <td class="py-1.5 px-2.5 text-center">${pdf}</td>
+          <td class="py-1.5 px-2.5 text-slate-600 whitespace-nowrap">${inst.category}</td>
+          <td class="py-1.5 px-2.5 text-slate-500 text-[11px] whitespace-nowrap">${inst.institution_type}</td>
+          <td class="py-1.5 px-2.5 text-right font-bold text-slate-900 whitespace-nowrap">${inst.score ? inst.score.toFixed(2) : '—'}</td>
+          <td class="py-1.5 px-2.5 text-right text-slate-600 whitespace-nowrap">${inst.tlr ? inst.tlr.toFixed(1) : '—'}</td>
+          <td class="py-1.5 px-2.5 text-right text-slate-600 whitespace-nowrap">${inst.rpc ? inst.rpc.toFixed(1) : '—'}</td>
+          <td class="py-1.5 px-2.5 text-right text-slate-600 whitespace-nowrap">${inst.go ? inst.go.toFixed(1) : '—'}</td>
+          <td class="py-1.5 px-2.5 text-right text-slate-600 whitespace-nowrap">${inst.oi ? inst.oi.toFixed(1) : '—'}</td>
+          <td class="py-1.5 px-2.5 text-right text-slate-600 whitespace-nowrap">${inst.perception ? inst.perception.toFixed(1) : '—'}</td>
+          <td class="py-1.5 px-2.5 text-center whitespace-nowrap">${pdf}</td>
         </tr>
       `;
     }).join('');
@@ -1534,9 +1537,12 @@ async function generateStateBrief(stateId) {
                 <th class="py-1.5 px-2.5 text-left">Institution Name</th>
                 <th class="py-1.5 px-2.5 text-left">Category</th>
                 <th class="py-1.5 px-2.5 text-left">Governance</th>
-                <th class="py-1.5 px-2.5 text-right">NIRF Score</th>
-                <th class="py-1.5 px-2.5 text-right">TLR</th>
-                <th class="py-1.5 px-2.5 text-right">RPC</th>
+                <th class="py-1.5 px-2.5 text-right font-bold text-slate-800">NIRF Score</th>
+                <th class="py-1.5 px-2.5 text-right" title="Teaching, Learning & Resources">TLR</th>
+                <th class="py-1.5 px-2.5 text-right" title="Research & Professional Practice">RPC</th>
+                <th class="py-1.5 px-2.5 text-right" title="Graduation Outcomes">GO</th>
+                <th class="py-1.5 px-2.5 text-right" title="Outreach & Inclusivity">OI</th>
+                <th class="py-1.5 px-2.5 text-right" title="Peer Perception">PR</th>
                 <th class="py-1.5 px-2.5 text-center">Report</th>
               </tr>
             </thead>
