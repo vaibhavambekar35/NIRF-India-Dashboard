@@ -536,6 +536,10 @@ async function openStateDetail(stateId, stateName) {
   panel.classList.remove('hidden');
 
   document.getElementById('panelStateName').textContent = stateName;
+  const btnBriefText = document.getElementById('btnStateBriefText');
+  if (btnBriefText) {
+    btnBriefText.textContent = `${stateName} Ranking Report (PDF)`;
+  }
 
   try {
     const res = await fetch(`/v1/distribution/states/${stateId}?year=${currentYear}&category=${currentCategorySlug}&scope=${currentScope}&ownership=${currentOwnership}`);
@@ -896,6 +900,10 @@ function setupEventListeners() {
     document.getElementById('panelStateDetail').classList.add('hidden');
     currentSelectedStateId = null;
     currentSelectedStateName = null;
+    const btnBriefText = document.getElementById('btnStateBriefText');
+    if (btnBriefText) {
+      btnBriefText.textContent = 'State Ranking Report (PDF)';
+    }
     highlightStateOnMap(null);
     highlightStateOnLeaderboard(null);
   });
@@ -1457,12 +1465,12 @@ async function generateStateBrief(stateId) {
         <div class="flex items-center justify-between">
           <div>
             <span class="text-[10px] font-bold tracking-widest text-blue-700 uppercase">Government of India • Ministry of Education</span>
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight mt-0.5">${data.state_name} – Executive Higher Education Factsheet</h2>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight mt-0.5">${data.state_name} – Higher Education Ranking Report</h2>
             <p class="text-xs text-slate-500 mt-0.5">National Institutional Ranking Framework (NIRF ${data.year}) • Scope: ${data.scope === 'top_100' ? 'Top 100 Institutions' : 'All Ranked'}</p>
           </div>
           <div class="text-right">
-            <span class="inline-block px-3 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold font-mono">
-              OFFICIAL POLICY BRIEF
+            <span class="inline-block px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-lg text-xs font-bold font-mono">
+              OFFICIAL RANKING REPORT
             </span>
             <p class="text-[10px] text-slate-400 mt-1">Generated: ${new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
           </div>
