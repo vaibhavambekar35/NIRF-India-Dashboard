@@ -1450,7 +1450,14 @@ async function generateStateBrief(stateId) {
       </div>
     `).join('');
 
-    let instRowsHtml = (data.institutions || []).map(inst => {
+    const rankedInsts = (data.institutions || []).filter(inst => {
+      if (inst.is_rank_band) return false;
+      const r = String(inst.rank || '');
+      if (r.includes('-') || !inst.score) return false;
+      return true;
+    });
+
+    let instRowsHtml = rankedInsts.map(inst => {
       const pdf = (inst.source_url && inst.source_url.startsWith('http'))
         ? `<a href="${inst.source_url}" target="_blank" class="text-blue-600 font-bold hover:underline">PDF</a>`
         : `<span class="text-slate-300">—</span>`;
@@ -1516,7 +1523,7 @@ async function generateStateBrief(stateId) {
       <!-- Ranked Institutions Table -->
       <div>
         <div class="flex items-center justify-between mb-2">
-          <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Ranked Institutions (${data.state_name} • All ${data.institutions ? data.institutions.length : 0})</h4>
+          <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Ranked Institutions (${data.state_name})</h4>
           <span class="text-[10px] text-slate-400">Official Parameter Scores</span>
         </div>
         <div class="overflow-x-auto rounded-lg border border-slate-200">

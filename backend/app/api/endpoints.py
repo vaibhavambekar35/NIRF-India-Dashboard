@@ -770,13 +770,18 @@ def get_state_brief(
     q = db.query(RankingResult, RankingEdition, Institution)\
           .join(Institution, Institution.id == RankingResult.institution_id)\
           .join(RankingEdition, RankingEdition.id == RankingResult.ranking_edition_id)\
-          .filter(Institution.state_id == state_id, RankingEdition.ranking_year == year)
+          .filter(
+              Institution.state_id == state_id,
+              RankingEdition.ranking_year == year,
+              RankingResult.is_rank_band == False,
+              RankingResult.nirf_rank.isnot(None)
+          )
 
     if use_top_100:
-        q = q.filter(get_top_100_filter())
+        q = q.filter(RankingResult.nirf_rank <= 100)
 
     results = q.order_by(
-        func.coalesce(RankingResult.nirf_rank, 9999).asc(),
+        RankingResult.nirf_rank.asc(),
         RankingResult.nirf_score.desc().nullslast()
     ).all()
 
@@ -797,6 +802,7 @@ def get_state_brief(
             "institution_name": inst.institution_name,
             "category": ed.category,
             "rank": rr.rank_display,
+            "is_rank_band": rr.is_rank_band,
             "score": rr.nirf_score,
             "city": inst.city or "—",
             "institution_type": itype,
