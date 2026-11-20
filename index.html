@@ -56,7 +56,118 @@
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <link rel="stylesheet" href="/static/style.css?v=3.1" />
+  <link rel="stylesheet" href="/static/style.css?v=3.2" />
+  <style>
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 8mm 8mm 10mm 8mm;
+      }
+      html, body {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100% !important;
+        overflow: visible !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      header, aside, main, #modalInstDetail, body > div:not(#modalStateBrief) {
+        display: none !important;
+      }
+      #modalStateBrief {
+        position: static !important;
+        inset: auto !important;
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        z-index: auto !important;
+      }
+      #modalStateBrief > div {
+        position: static !important;
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+      }
+      .print\:hidden {
+        display: none !important;
+      }
+      #stateBriefPrintableContent {
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      #stateBriefPrintableContent .overflow-x-auto,
+      #stateBriefPrintableContent .overflow-y-auto {
+        overflow: visible !important;
+        max-height: none !important;
+        height: auto !important;
+        display: block !important;
+        border: none !important;
+      }
+      #stateBriefPrintableContent table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        page-break-inside: auto !important;
+        font-size: 8pt !important;
+        line-height: 1.25 !important;
+      }
+      #stateBriefPrintableContent thead {
+        display: table-header-group !important;
+      }
+      #stateBriefPrintableContent thead th {
+        background-color: #f8fafc !important;
+        color: #334155 !important;
+        border-bottom: 2px solid #cbd5e1 !important;
+        padding: 4px 4px !important;
+        font-size: 7.5pt !important;
+      }
+      #stateBriefPrintableContent tbody tr {
+        page-break-inside: avoid !important;
+        page-break-after: auto !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+      }
+      #stateBriefPrintableContent tbody td {
+        padding: 3.5px 4px !important;
+        font-size: 8pt !important;
+      }
+      #stateBriefPrintableContent .grid {
+        page-break-inside: avoid !important;
+      }
+      #stateBriefPrintableContent .border-b-2 {
+        page-break-inside: avoid !important;
+        margin-bottom: 10px !important;
+        padding-bottom: 8px !important;
+      }
+    }
+  </style>
 </head>
 <body class="bg-[#fbf9f6] text-slate-900 antialiased min-h-screen flex flex-col font-sans">
 
@@ -763,7 +874,7 @@
     </div>
   </div>
 
-  <script src="/app.js?v=5.6"></script>
+  <script src="/app.js?v=5.7"></script>
 
 </body>
 </html>

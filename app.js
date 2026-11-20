@@ -999,7 +999,11 @@ function setupEventListeners() {
   const btnPrintStateBrief = document.getElementById('btnPrintStateBrief');
   if (btnPrintStateBrief) {
     btnPrintStateBrief.addEventListener('click', () => {
-      window.print();
+      const stateName = window.__activeBriefStateName || currentSelectedStateName || 'State';
+      document.title = `NIRF Insight - ${stateName}`;
+      setTimeout(() => {
+        window.print();
+      }, 50);
     });
   }
 
@@ -1008,8 +1012,27 @@ function setupEventListeners() {
   if (btnCloseStateBrief) {
     btnCloseStateBrief.addEventListener('click', () => {
       document.getElementById('modalStateBrief').classList.add('hidden');
+      document.title = 'NIRF Insight – India State-wise Ranking Distribution Dashboard';
     });
   }
+
+  // Sync title when native browser print or Ctrl+P is triggered
+  window.addEventListener('beforeprint', () => {
+    const modal = document.getElementById('modalStateBrief');
+    if (modal && !modal.classList.contains('hidden')) {
+      const stateName = window.__activeBriefStateName || currentSelectedStateName;
+      if (stateName) {
+        document.title = `NIRF Insight - ${stateName}`;
+      }
+    }
+  });
+
+  window.addEventListener('afterprint', () => {
+    const modal = document.getElementById('modalStateBrief');
+    if (!modal || modal.classList.contains('hidden')) {
+      document.title = 'NIRF Insight – India State-wise Ranking Distribution Dashboard';
+    }
+  });
 
   document.getElementById('btnExportCSV').addEventListener('click', e => {
     e.preventDefault();
@@ -1448,6 +1471,9 @@ async function generateStateBrief(stateId) {
   try {
     const res = await fetch(`/v1/export/state-brief?state_id=${stateId}&year=${currentYear}&scope=${currentScope}`);
     const data = await res.json();
+
+    window.__activeBriefStateName = data.state_name;
+    document.title = `NIRF Insight - ${data.state_name}`;
 
     const container = document.getElementById('stateBriefPrintableContent');
     if (!container) return;
