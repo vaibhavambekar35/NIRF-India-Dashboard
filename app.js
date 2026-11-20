@@ -1487,12 +1487,7 @@ async function generateStateBrief(stateId) {
       </div>
 
       <!-- Key Metrics Row -->
-      <div class="grid grid-cols-4 gap-3">
-        <div class="bg-blue-50/60 border border-blue-200 rounded-xl p-3">
-          <span class="text-[10px] font-bold text-blue-700 uppercase tracking-wider">Total Ranked Seats</span>
-          <p class="text-2xl font-black text-blue-900 mt-1">${s.total_institutions}</p>
-          <span class="text-[10px] text-blue-600">Top 100 representation</span>
-        </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div class="bg-emerald-50/60 border border-emerald-200 rounded-xl p-3">
           <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Best National Rank</span>
           <p class="text-2xl font-black text-emerald-900 mt-1">#${s.best_rank || 'N/A'}</p>
@@ -1510,46 +1505,11 @@ async function generateStateBrief(stateId) {
         </div>
       </div>
 
-      <!-- Discipline & Governance Distribution -->
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-        <div class="md:col-span-7 bg-white rounded-xl border border-slate-200 p-4">
-          <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5">Discipline & Category Footprint</h4>
-          <div class="grid grid-cols-3 gap-2">
-            ${catBadgesHtml}
-          </div>
-        </div>
-
-        <div class="md:col-span-5 bg-white rounded-xl border border-slate-200 p-4">
-          <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5">Governance Type Breakdown</h4>
-          <div class="space-y-2">
-            <div>
-              <div class="flex justify-between text-xs font-semibold text-slate-700">
-                <span>Central Institutes</span>
-                <span class="font-bold text-blue-700">${own['Central']}</span>
-              </div>
-              <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
-                <div class="bg-blue-600 h-full" style="width: ${s.total_institutions ? (own['Central'] / s.total_institutions * 100) : 0}%"></div>
-              </div>
-            </div>
-            <div>
-              <div class="flex justify-between text-xs font-semibold text-slate-700">
-                <span>State Public Universities</span>
-                <span class="font-bold text-emerald-700">${own['State Public']}</span>
-              </div>
-              <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
-                <div class="bg-emerald-600 h-full" style="width: ${s.total_institutions ? (own['State Public'] / s.total_institutions * 100) : 0}%"></div>
-              </div>
-            </div>
-            <div>
-              <div class="flex justify-between text-xs font-semibold text-slate-700">
-                <span>Private / Deemed Universities</span>
-                <span class="font-bold text-purple-700">${own['Private / Deemed']}</span>
-              </div>
-              <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-1">
-                <div class="bg-purple-600 h-full" style="width: ${s.total_institutions ? (own['Private / Deemed'] / s.total_institutions * 100) : 0}%"></div>
-              </div>
-            </div>
-          </div>
+      <!-- Discipline Footprint -->
+      <div class="bg-white rounded-xl border border-slate-200 p-4">
+        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5">Discipline & Category Footprint</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+          ${catBadgesHtml}
         </div>
       </div>
 
